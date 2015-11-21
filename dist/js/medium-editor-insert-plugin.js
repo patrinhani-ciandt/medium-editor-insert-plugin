@@ -1947,7 +1947,11 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
         $toolbar = $('.medium-insert-images-toolbar');
         $toolbar2 = $('.medium-insert-images-toolbar2');
 
-        top = $image.offset().top - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an image outset, 5px - distance from an image
+        var scrollTopValue = $(toolbarContainer).scrollTop();
+        var pageYOffset = window.pageYOffset;
+        var imageTop = $image.offset().top + pageYOffset + scrollTopValue;
+        
+        top = imageTop - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an image outset, 5px - distance from an image
         if (top < 0) {
             top = 0;
         }
