@@ -1965,7 +1965,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
 
         $toolbar2
             .css({
-                top: $image.offset().top + 2, // 2px - distance from a border
+                top: imageTop + 2, // 2px - distance from a border
                 left: $image.offset().left + $image.width() - $toolbar2.width() - 4 // 4px - distance from a border
             })
             .show();
