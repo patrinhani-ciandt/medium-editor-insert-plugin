@@ -38,6 +38,9 @@
                         $(document).trigger($event);
                     }
                 }
+            },
+            toolbar: {
+              zIndex: 2000  
             }
         };
 
@@ -511,7 +514,10 @@
             return;
         }
 
-        $('body').append(this.templates['src/js/templates/embeds-toolbar.hbs']({
+        var mediumEditor = this.core.getEditor();
+        var toolbarContainer = mediumEditor.options.elementsContainer || 'body';
+
+        $(toolbarContainer).append(this.templates['src/js/templates/embeds-toolbar.hbs']({
             styles: this.options.styles,
             actions: this.options.actions
         }).trim());
@@ -519,13 +525,18 @@
         $toolbar = $('.medium-insert-embeds-toolbar');
         $toolbar2 = $('.medium-insert-embeds-toolbar2');
 
-        top = $embed.offset().top - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an embed outset, 5px - distance from an embed
+        var scrollTopValue = $(toolbarContainer).scrollTop();
+        var pageYOffset = window.pageYOffset;
+        var embedTop = $embed.offset().top + pageYOffset + scrollTopValue;
+
+        top = embedTop - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an embed outset, 5px - distance from an embed
         if (top < 0) {
             top = 0;
         }
 
         $toolbar
             .css({
+                zIndex: this.options.toolbar.zIndex,
                 top: top,
                 left: $embed.offset().left + $embed.width() / 2 - $toolbar.width() / 2
             })
@@ -533,7 +544,8 @@
 
         $toolbar2
             .css({
-                top: $embed.offset().top + 2, // 2px - distance from a border
+                zIndex: this.options.toolbar.zIndex,
+                top: embedTop + 2, // 2px - distance from a border
                 left: $embed.offset().left + $embed.width() - $toolbar2.width() - 4 // 4px - distance from a border
             })
             .show();

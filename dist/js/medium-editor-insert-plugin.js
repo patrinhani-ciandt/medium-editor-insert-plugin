@@ -808,6 +808,9 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
                         $(document).trigger($event);
                     }
                 }
+            },
+            toolbar: {
+              zIndex: 2000  
             }
         };
 
@@ -1281,7 +1284,10 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
             return;
         }
 
-        $('body').append(this.templates['src/js/templates/embeds-toolbar.hbs']({
+        var mediumEditor = this.core.getEditor();
+        var toolbarContainer = mediumEditor.options.elementsContainer || 'body';
+
+        $(toolbarContainer).append(this.templates['src/js/templates/embeds-toolbar.hbs']({
             styles: this.options.styles,
             actions: this.options.actions
         }).trim());
@@ -1289,13 +1295,18 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
         $toolbar = $('.medium-insert-embeds-toolbar');
         $toolbar2 = $('.medium-insert-embeds-toolbar2');
 
-        top = $embed.offset().top - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an embed outset, 5px - distance from an embed
+        var scrollTopValue = $(toolbarContainer).scrollTop();
+        var pageYOffset = window.pageYOffset;
+        var embedTop = $embed.offset().top + pageYOffset + scrollTopValue;
+
+        top = embedTop - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an embed outset, 5px - distance from an embed
         if (top < 0) {
             top = 0;
         }
 
         $toolbar
             .css({
+                zIndex: this.options.toolbar.zIndex,
                 top: top,
                 left: $embed.offset().left + $embed.width() / 2 - $toolbar.width() / 2
             })
@@ -1303,7 +1314,8 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
 
         $toolbar2
             .css({
-                top: $embed.offset().top + 2, // 2px - distance from a border
+                zIndex: this.options.toolbar.zIndex,
+                top: embedTop + 2, // 2px - distance from a border
                 left: $embed.offset().left + $embed.width() - $toolbar2.width() - 4 // 4px - distance from a border
             })
             .show();
@@ -1462,6 +1474,9 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
             messages: {
                 acceptFileTypesError: 'This file is not in a supported format: ',
                 maxFileSizeError: 'This file is too big: '
+            },
+            toolbar: {
+              zIndex: 2000  
             }
             // uploadCompleted: function ($el, data) {}
         };
@@ -1958,6 +1973,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
 
         $toolbar
             .css({
+                zIndex: this.options.toolbar.zIndex,
                 top: top,
                 left: $image.offset().left + $image.width() / 2 - $toolbar.width() / 2
             })
@@ -1965,6 +1981,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
 
         $toolbar2
             .css({
+                zIndex: this.options.toolbar.zIndex,
                 top: imageTop + 2, // 2px - distance from a border
                 left: $image.offset().left + $image.width() - $toolbar2.width() - 4 // 4px - distance from a border
             })

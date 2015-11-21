@@ -71,6 +71,9 @@
             messages: {
                 acceptFileTypesError: 'This file is not in a supported format: ',
                 maxFileSizeError: 'This file is too big: '
+            },
+            toolbar: {
+              zIndex: 2000  
             }
             // uploadCompleted: function ($el, data) {}
         };
@@ -567,6 +570,7 @@
 
         $toolbar
             .css({
+                zIndex: this.options.toolbar.zIndex,
                 top: top,
                 left: $image.offset().left + $image.width() / 2 - $toolbar.width() / 2
             })
@@ -574,6 +578,7 @@
 
         $toolbar2
             .css({
+                zIndex: this.options.toolbar.zIndex,
                 top: imageTop + 2, // 2px - distance from a border
                 left: $image.offset().left + $image.width() - $toolbar2.width() - 4 // 4px - distance from a border
             })
