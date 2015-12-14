@@ -1286,6 +1286,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
 
         var mediumEditor = this.core.getEditor();
         var toolbarContainer = mediumEditor.options.elementsContainer || 'body';
+        var toolbarContainerOffsetTop = toolbarContainer.offsetTop;
 
         $(toolbarContainer).append(this.templates['src/js/templates/embeds-toolbar.hbs']({
             styles: this.options.styles,
@@ -1297,7 +1298,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
 
         var scrollTopValue = $(toolbarContainer).scrollTop();
         var pageYOffset = window.pageYOffset;
-        var embedTop = $embed.offset().top + pageYOffset + scrollTopValue;
+        var embedTop = $embed.offset().top + pageYOffset + scrollTopValue - toolbarContainerOffsetTop;
 
         top = embedTop - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an embed outset, 5px - distance from an embed
         if (top < 0) {
@@ -1953,6 +1954,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
 
         var mediumEditor = this.core.getEditor();
         var toolbarContainer = mediumEditor.options.elementsContainer || 'body';
+        var toolbarContainerOffsetTop = toolbarContainer.offsetTop;
 
         $(toolbarContainer).append(this.templates['src/js/templates/images-toolbar.hbs']({
             styles: this.options.styles,
@@ -1964,7 +1966,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
 
         var scrollTopValue = $(toolbarContainer).scrollTop();
         var pageYOffset = window.pageYOffset;
-        var imageTop = $image.offset().top + pageYOffset + scrollTopValue;
+        var imageTop = $image.offset().top + pageYOffset + scrollTopValue - toolbarContainerOffsetTop;
         
         top = imageTop - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an image outset, 5px - distance from an image
         if (top < 0) {
