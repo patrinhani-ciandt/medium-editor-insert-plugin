@@ -39,11 +39,15 @@
                     label: '<span class="fa fa-th"></span>',
                     // added: function ($el) {},
                     // removed: function ($el) {}
+                },
+                remove: {
+                    label: '<span class="fa fa-times"></span>',
+                    // added: function ($el) {},
+                    // removed: function ($el) {}
                 }
             },
             actions: {
                 remove: {
-                    label: '<span class="fa fa-times"></span>',
                     clicked: function () {
                         var $event = $.Event('keydown');
 
@@ -73,7 +77,7 @@
                 maxFileSizeError: 'This file is too big: '
             },
             toolbar: {
-              zIndex: 2000  
+              zIndex: 2000
             }
             // uploadCompleted: function ($el, data) {}
         };
@@ -141,8 +145,7 @@
         $(document)
             .on('click', $.proxy(this, 'unselectImage'))
             .on('keydown', $.proxy(this, 'removeImage'))
-            .on('click', '.medium-insert-images-toolbar .medium-editor-action', $.proxy(this, 'toolbarAction'))
-            .on('click', '.medium-insert-images-toolbar2 .medium-editor-action', $.proxy(this, 'toolbar2Action'));
+            .on('click', '.medium-insert-images-toolbar .medium-editor-action', $.proxy(this, 'toolbarAction'));
 
         this.$el
             .on('click', '.medium-insert-images img', $.proxy(this, 'selectImage'));
@@ -459,13 +462,13 @@
 
         if ($el.is('img') && $el.hasClass('medium-insert-image-active')) {
             $image.not($el).removeClass('medium-insert-image-active');
-            $('.medium-insert-images-toolbar, .medium-insert-images-toolbar2').remove();
+            $('.medium-insert-images-toolbar').remove();
             this.core.removeCaptions($el);
             return;
         }
 
         $image.removeClass('medium-insert-image-active');
-        $('.medium-insert-images-toolbar, .medium-insert-images-toolbar2').remove();
+        $('.medium-insert-images-toolbar').remove();
 
         if ($el.is('.medium-insert-caption-placeholder')) {
             this.core.removeCaptionPlaceholder($image.closest('figure'));
@@ -495,7 +498,7 @@
                 $parent = $image.closest('.medium-insert-images');
                 $image.closest('figure').remove();
 
-                $('.medium-insert-images-toolbar, .medium-insert-images-toolbar2').remove();
+                $('.medium-insert-images-toolbar').remove();
 
                 if ($parent.find('figure').length === 0) {
                     $empty = $parent.next();
@@ -546,24 +549,28 @@
         var $image = this.$el.find('.medium-insert-image-active'),
             $p = $image.closest('.medium-insert-images'),
             active = false,
-            $toolbar, $toolbar2, top;
+            $toolbar, top;
 
         var mediumEditor = this.core.getEditor();
         var toolbarContainer = mediumEditor.options.elementsContainer || 'body';
         var toolbarContainerOffsetTop = toolbarContainer.offsetTop;
 
-        $(toolbarContainer).append(this.templates['src/js/templates/images-toolbar.hbs']({
+        var $toolbarElementData = {
             styles: this.options.styles,
             actions: this.options.actions
-        }).trim());
+        };
+
+        var $toolbarElement = this.templates['src/js/templates/images-toolbar.hbs'](
+          $toolbarElementData).trim();
+
+        $(toolbarContainer).append($toolbarElement);
 
         $toolbar = $('.medium-insert-images-toolbar');
-        $toolbar2 = $('.medium-insert-images-toolbar2');
 
         var scrollTopValue = $(toolbarContainer).scrollTop();
         var pageYOffset = window.pageYOffset;
         var imageTop = $image.offset().top + pageYOffset + scrollTopValue - toolbarContainerOffsetTop;
-        
+
         top = imageTop - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an image outset, 5px - distance from an image
         if (top < 0) {
             top = 0;
@@ -574,14 +581,6 @@
                 zIndex: this.options.toolbar.zIndex,
                 top: top,
                 left: $image.offset().left + $image.width() / 2 - $toolbar.width() / 2
-            })
-            .show();
-
-        $toolbar2
-            .css({
-                zIndex: this.options.toolbar.zIndex,
-                top: imageTop + 2, // 2px - distance from a border
-                left: $image.offset().left + $image.width() - $toolbar2.width() - 4 // 4px - distance from a border
             })
             .show();
 
@@ -620,9 +619,15 @@
 
             if ($(this).hasClass('medium-editor-button-active')) {
                 $p.addClass(className);
-
-                if (that.options.styles[$(this).data('action')].added) {
-                    that.options.styles[$(this).data('action')].added($p);
+                
+                var toolbarButtonAction = that.options.actions[$(this).data('action')];
+                
+                if ((toolbarButtonAction) && (toolbarButtonAction.clicked)) {
+                  toolbarButtonAction.clicked($p.find('.medium-insert-image-active'));
+                } else {
+                  if (that.options.styles[$(this).data('action')].added) {
+                      that.options.styles[$(this).data('action')].added($p);
+                  }
                 }
             } else {
                 $p.removeClass(className);
@@ -632,26 +637,6 @@
                 }
             }
         });
-
-        this.core.hideButtons();
-
-        this.core.triggerInput();
-    };
-
-    /**
-     * Fires toolbar2 action
-     *
-     * @param {Event} e
-     * @returns {void}
-     */
-
-    Images.prototype.toolbar2Action = function (e) {
-        var $button = $(e.target).is('button') ? $(e.target) : $(e.target).closest('button'),
-            callback = this.options.actions[$button.data('action')].clicked;
-
-        if (callback) {
-            callback(this.$el.find('.medium-insert-image-active'));
-        }
 
         this.core.hideButtons();
 

@@ -194,7 +194,6 @@ describe('Images addon', function () {
 
         expect(this.$el.find('img').hasClass('medium-insert-image-active')).toBe(true);
         expect($('.medium-insert-images-toolbar').length).toEqual(1);
-        expect($('.medium-insert-images-toolbar2').length).toEqual(1);
         expect(this.$el.find('figcaption').length).toEqual(1);
     });
 
@@ -235,7 +234,6 @@ describe('Images addon', function () {
 
         expect(this.$el.find('img').hasClass('medium-insert-image-active')).toBe(false);
         expect($('.medium-insert-images-toolbar').length).toEqual(0);
-        expect($('.medium-insert-images-toolbar2').length).toEqual(0);
         expect(this.$el.find('figcaption').length).toEqual(0);
     });
 
@@ -349,25 +347,6 @@ describe('Images addon', function () {
         jasmine.clock().tick(50);
 
         $('.medium-insert-images-toolbar .medium-editor-action').first().click();
-    });
-
-    it('calls callback function after clicking on image action ', function (done) {
-        this.addon.options.actions.remove.clicked = function () {
-            expect(true).toBe(true);
-            done();
-        };
-
-        this.$el.find('p')
-            .addClass('medium-insert-images')
-            .append('<figure><img src="image1.jpg" alt=""></figure>');
-
-        // Place caret into first paragraph
-        placeCaret(this.$el.find('p').get(0), 0);
-
-        this.$el.find('img').click();
-        jasmine.clock().tick(50);
-
-        $('.medium-insert-images-toolbar2 .medium-editor-action').first().click();
     });
 
     it('calls uploadCompleted callback', function (done) {

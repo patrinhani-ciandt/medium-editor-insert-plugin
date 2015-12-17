@@ -1,5 +1,5 @@
 /*! 
- * medium-editor-insert-plugin v2.1.0 - jQuery insert plugin for MediumEditor
+ * medium-editor-insert-plugin v2.100.9 - jQuery insert plugin for MediumEditor
  *
  * https://github.com/orthes/medium-editor-insert-plugin
  * 
@@ -110,31 +110,12 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
     + "\">"
     + ((stack1 = ((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "</button>\n                </li>\n";
-},"4":function(container,depth0,helpers,partials,data) {
-    var stack1;
-
-  return "	<div class=\"medium-insert-images-toolbar2 medium-editor-toolbar medium-editor-toolbar-active\">\n		<ul class=\"medium-editor-toolbar-actions clearfix\">\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.actions : depth0),{"name":"each","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    	</ul>\n    </div>\n";
-},"5":function(container,depth0,helpers,partials,data) {
-    var stack1;
-
-  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.label : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"6":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function";
-
-  return "        	        <li>\n        	            <button class=\"medium-editor-action\" data-action=\""
-    + container.escapeExpression(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
-    + "\">"
-    + ((stack1 = ((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper))) != null ? stack1 : "")
-    + "</button>\n        	        </li>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : {};
+    var stack1;
 
   return "<div class=\"medium-insert-images-toolbar medium-editor-toolbar medium-toolbar-arrow-under medium-editor-toolbar-active\">\n    <ul class=\"medium-editor-toolbar-actions clearfix\">\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.styles : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    </ul>\n</div>\n\n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.actions : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.styles : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "    </ul>\n</div>";
 },"useData":true});
 ;(function ($, window, document, undefined) {
 
@@ -1443,11 +1424,15 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
                     label: '<span class="fa fa-th"></span>',
                     // added: function ($el) {},
                     // removed: function ($el) {}
+                },
+                remove: {
+                    label: '<span class="fa fa-times"></span>',
+                    // added: function ($el) {},
+                    // removed: function ($el) {}
                 }
             },
             actions: {
                 remove: {
-                    label: '<span class="fa fa-times"></span>',
                     clicked: function () {
                         var $event = $.Event('keydown');
 
@@ -1477,7 +1462,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
                 maxFileSizeError: 'This file is too big: '
             },
             toolbar: {
-              zIndex: 2000  
+              zIndex: 2000
             }
             // uploadCompleted: function ($el, data) {}
         };
@@ -1545,8 +1530,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
         $(document)
             .on('click', $.proxy(this, 'unselectImage'))
             .on('keydown', $.proxy(this, 'removeImage'))
-            .on('click', '.medium-insert-images-toolbar .medium-editor-action', $.proxy(this, 'toolbarAction'))
-            .on('click', '.medium-insert-images-toolbar2 .medium-editor-action', $.proxy(this, 'toolbar2Action'));
+            .on('click', '.medium-insert-images-toolbar .medium-editor-action', $.proxy(this, 'toolbarAction'));
 
         this.$el
             .on('click', '.medium-insert-images img', $.proxy(this, 'selectImage'));
@@ -1863,13 +1847,13 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
 
         if ($el.is('img') && $el.hasClass('medium-insert-image-active')) {
             $image.not($el).removeClass('medium-insert-image-active');
-            $('.medium-insert-images-toolbar, .medium-insert-images-toolbar2').remove();
+            $('.medium-insert-images-toolbar').remove();
             this.core.removeCaptions($el);
             return;
         }
 
         $image.removeClass('medium-insert-image-active');
-        $('.medium-insert-images-toolbar, .medium-insert-images-toolbar2').remove();
+        $('.medium-insert-images-toolbar').remove();
 
         if ($el.is('.medium-insert-caption-placeholder')) {
             this.core.removeCaptionPlaceholder($image.closest('figure'));
@@ -1899,7 +1883,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
                 $parent = $image.closest('.medium-insert-images');
                 $image.closest('figure').remove();
 
-                $('.medium-insert-images-toolbar, .medium-insert-images-toolbar2').remove();
+                $('.medium-insert-images-toolbar').remove();
 
                 if ($parent.find('figure').length === 0) {
                     $empty = $parent.next();
@@ -1950,24 +1934,28 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
         var $image = this.$el.find('.medium-insert-image-active'),
             $p = $image.closest('.medium-insert-images'),
             active = false,
-            $toolbar, $toolbar2, top;
+            $toolbar, top;
 
         var mediumEditor = this.core.getEditor();
         var toolbarContainer = mediumEditor.options.elementsContainer || 'body';
         var toolbarContainerOffsetTop = toolbarContainer.offsetTop;
 
-        $(toolbarContainer).append(this.templates['src/js/templates/images-toolbar.hbs']({
+        var $toolbarElementData = {
             styles: this.options.styles,
             actions: this.options.actions
-        }).trim());
+        };
+
+        var $toolbarElement = this.templates['src/js/templates/images-toolbar.hbs'](
+          $toolbarElementData).trim();
+
+        $(toolbarContainer).append($toolbarElement);
 
         $toolbar = $('.medium-insert-images-toolbar');
-        $toolbar2 = $('.medium-insert-images-toolbar2');
 
         var scrollTopValue = $(toolbarContainer).scrollTop();
         var pageYOffset = window.pageYOffset;
         var imageTop = $image.offset().top + pageYOffset + scrollTopValue - toolbarContainerOffsetTop;
-        
+
         top = imageTop - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an image outset, 5px - distance from an image
         if (top < 0) {
             top = 0;
@@ -1978,14 +1966,6 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
                 zIndex: this.options.toolbar.zIndex,
                 top: top,
                 left: $image.offset().left + $image.width() / 2 - $toolbar.width() / 2
-            })
-            .show();
-
-        $toolbar2
-            .css({
-                zIndex: this.options.toolbar.zIndex,
-                top: imageTop + 2, // 2px - distance from a border
-                left: $image.offset().left + $image.width() - $toolbar2.width() - 4 // 4px - distance from a border
             })
             .show();
 
@@ -2024,9 +2004,15 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
 
             if ($(this).hasClass('medium-editor-button-active')) {
                 $p.addClass(className);
-
-                if (that.options.styles[$(this).data('action')].added) {
-                    that.options.styles[$(this).data('action')].added($p);
+                
+                var toolbarButtonAction = that.options.actions[$(this).data('action')];
+                
+                if ((toolbarButtonAction) && (toolbarButtonAction.clicked)) {
+                  toolbarButtonAction.clicked($p.find('.medium-insert-image-active'));
+                } else {
+                  if (that.options.styles[$(this).data('action')].added) {
+                      that.options.styles[$(this).data('action')].added($p);
+                  }
                 }
             } else {
                 $p.removeClass(className);
@@ -2036,26 +2022,6 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
                 }
             }
         });
-
-        this.core.hideButtons();
-
-        this.core.triggerInput();
-    };
-
-    /**
-     * Fires toolbar2 action
-     *
-     * @param {Event} e
-     * @returns {void}
-     */
-
-    Images.prototype.toolbar2Action = function (e) {
-        var $button = $(e.target).is('button') ? $(e.target) : $(e.target).closest('button'),
-            callback = this.options.actions[$button.data('action')].clicked;
-
-        if (callback) {
-            callback(this.$el.find('.medium-insert-image-active'));
-        }
 
         this.core.hideButtons();
 
