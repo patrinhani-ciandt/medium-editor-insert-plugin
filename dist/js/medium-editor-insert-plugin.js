@@ -1462,7 +1462,8 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
                 maxFileSizeError: 'This file is too big: '
             },
             toolbar: {
-              zIndex: 2000
+              zIndex: 2000,
+              buttons: [ 'wide', 'left', 'right', 'grid', 'remove' ]
             }
             // uploadCompleted: function ($el, data) {}
         };
@@ -1934,14 +1935,24 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
         var $image = this.$el.find('.medium-insert-image-active'),
             $p = $image.closest('.medium-insert-images'),
             active = false,
-            $toolbar, top;
+            $toolbar, top,
+            that = this;
 
         var mediumEditor = this.core.getEditor();
         var toolbarContainer = mediumEditor.options.elementsContainer || 'body';
         var toolbarContainerOffsetTop = toolbarContainer.offsetTop;
 
+        var availableStyles = this.options.styles;
+        
+        if (this.options.toolbar.buttons) {
+            availableStyles = {};
+            this.options.toolbar.buttons.forEach(function (buttonItem) {
+                availableStyles[buttonItem] = that.options.styles[buttonItem];
+            });
+        }
+        
         var $toolbarElementData = {
-            styles: this.options.styles,
+            styles: availableStyles,
             actions: this.options.actions
         };
 
