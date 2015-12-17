@@ -543,7 +543,16 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
      */
 
     Core.prototype.showButtons = function (activeAddon) {
-        var $buttons = this.$el.find('.medium-insert-buttons');
+      var $buttons = this.$el.find('.medium-insert-buttons'),
+          addOnOptions = null,
+          ableToShowButtons = true;
+
+      if (activeAddon) {
+        addOnOptions = this.options.addons[activeAddon];
+        ableToShowButtons = (addOnOptions.showInsertButtonOnSelect) ? true : false;
+      }
+
+      if (ableToShowButtons) {
 
         $buttons.show();
         $buttons.find('li').show();
@@ -552,8 +561,11 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
             $buttons.find('li').hide();
             $buttons.find('a[data-addon="'+ activeAddon +'"]').parent().show();
         }
+      } else {
+        $buttons.hide();
+      }
     };
-
+    
     /**
      * Hides buttons
      *
@@ -762,6 +774,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
             oembedProxy: 'http://medium.iframe.ly/api/oembed?iframe=1',
             captions: true,
             captionPlaceholder: 'Type caption (optional)',
+            showInsertButtonOnSelect: true,
             styles: {
                 wide: {
                     label: '<span class="fa fa-align-justify"></span>',
@@ -1399,6 +1412,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
             preview: true,
             captions: true,
             captionPlaceholder: 'Type caption for image (optional)',
+            showInsertButtonOnSelect: true,
             autoGrid: 3,
             fileUploadOptions: { // See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
                 url: 'upload.php',

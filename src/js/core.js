@@ -424,7 +424,16 @@
      */
 
     Core.prototype.showButtons = function (activeAddon) {
-        var $buttons = this.$el.find('.medium-insert-buttons');
+      var $buttons = this.$el.find('.medium-insert-buttons'),
+          addOnOptions = null,
+          ableToShowButtons = true;
+
+      if (activeAddon) {
+        addOnOptions = this.options.addons[activeAddon];
+        ableToShowButtons = (addOnOptions.showInsertButtonOnSelect) ? true : false;
+      }
+
+      if (ableToShowButtons) {
 
         $buttons.show();
         $buttons.find('li').show();
@@ -433,8 +442,11 @@
             $buttons.find('li').hide();
             $buttons.find('a[data-addon="'+ activeAddon +'"]').parent().show();
         }
+      } else {
+        $buttons.hide();
+      }
     };
-
+    
     /**
      * Hides buttons
      *

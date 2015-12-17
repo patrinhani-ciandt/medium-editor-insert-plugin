@@ -11,6 +11,7 @@
             oembedProxy: 'http://medium.iframe.ly/api/oembed?iframe=1',
             captions: true,
             captionPlaceholder: 'Type caption (optional)',
+            showInsertButtonOnSelect: true,
             styles: {
                 wide: {
                     label: '<span class="fa fa-align-justify"></span>',

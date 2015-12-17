@@ -14,6 +14,7 @@
             preview: true,
             captions: true,
             captionPlaceholder: 'Type caption for image (optional)',
+            showInsertButtonOnSelect: true,
             autoGrid: 3,
             fileUploadOptions: { // See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
                 url: 'upload.php',
