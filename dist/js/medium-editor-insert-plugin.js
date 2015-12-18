@@ -1,5 +1,5 @@
 /*! 
- * medium-editor-insert-plugin v2.100.13 - jQuery insert plugin for MediumEditor
+ * medium-editor-insert-plugin v2.100.14 - jQuery insert plugin for MediumEditor
  *
  * https://github.com/orthes/medium-editor-insert-plugin
  * 
@@ -187,6 +187,11 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
 
             this.options.editor.getExtensionByName('placeholder').updatePlaceholder = this.editorUpdatePlaceholder;
         }
+
+        var that = this;
+        this.$el.on('blur', function () {
+          that.hideButtons();
+        });
     }
 
     /**

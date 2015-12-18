@@ -68,6 +68,11 @@
 
             this.options.editor.getExtensionByName('placeholder').updatePlaceholder = this.editorUpdatePlaceholder;
         }
+
+        var that = this;
+        this.$el.on('blur', function () {
+          that.hideButtons();
+        });
     }
 
     /**
