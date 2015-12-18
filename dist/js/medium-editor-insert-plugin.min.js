@@ -1,5 +1,5 @@
 /*! 
- * medium-editor-insert-plugin v2.100.11 - jQuery insert plugin for MediumEditor
+ * medium-editor-insert-plugin v2.100.12 - jQuery insert plugin for MediumEditor
  *
  * https://github.com/orthes/medium-editor-insert-plugin
  * 
