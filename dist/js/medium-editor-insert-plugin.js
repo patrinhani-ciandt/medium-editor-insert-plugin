@@ -1,5 +1,5 @@
 /*! 
- * medium-editor-insert-plugin v2.100.9 - jQuery insert plugin for MediumEditor
+ * medium-editor-insert-plugin v2.100.11 - jQuery insert plugin for MediumEditor
  *
  * https://github.com/orthes/medium-editor-insert-plugin
  * 
@@ -595,19 +595,28 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
             left, top;
 
         if ($p.length) {
-
-            left = $p.position().left - parseInt($buttons.find('.medium-insert-buttons-addons').css('left'), 10) - parseInt($buttons.find('.medium-insert-buttons-addons a:first').css('margin-left'), 10);
-            left = left < 0 ? $p.position().left : left;
-            top = $p.position().top + parseInt($p.css('margin-top'), 10);
-
-            if (activeAddon) {
-                if ($p.position().left !== $first.position().left) {
-                    left = $first.position().left;
-                }
-
-                top += $p.height() + 15; // 15px offset
+    
+            var offsetParentLeft = $p.offsetParent().position().left,
+                offsetLeft = $p.position().left,
+                buttonAddWidth = $buttons.find('a.medium-insert-buttons-show:first').width();
+    
+            left = offsetLeft - buttonAddWidth;
+            left = left + this.options.buttonsDiffLeft;
+    
+            if ((offsetParentLeft + left) < 0) {
+                left = offsetLeft;
             }
 
+            top = $p.position().top + parseInt($p.css('margin-top'), 10);
+    
+            if (activeAddon) {
+                if (offsetLeft !== $first.position().left) {
+                    left = $first.position().left;
+                }
+    
+                top += $p.height() + 15; // 15px offset
+            }
+    
             $buttons.css({
                 left: left,
                 top: top
