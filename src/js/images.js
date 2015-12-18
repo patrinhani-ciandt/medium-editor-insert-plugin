@@ -69,7 +69,9 @@
                     nested: false,
                     vertical: false,
                     afterMove: function () {
-                        that.core.triggerInput();
+                        if (that.core) {
+                            that.core.triggerInput();
+                        }
                     }
                 });
             },

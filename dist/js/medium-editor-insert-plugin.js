@@ -1,5 +1,5 @@
 /*! 
- * medium-editor-insert-plugin v2.100.12 - jQuery insert plugin for MediumEditor
+ * medium-editor-insert-plugin v2.100.13 - jQuery insert plugin for MediumEditor
  *
  * https://github.com/orthes/medium-editor-insert-plugin
  * 
@@ -1476,7 +1476,9 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
                     nested: false,
                     vertical: false,
                     afterMove: function () {
-                        that.core.triggerInput();
+                        if (that.core) {
+                            that.core.triggerInput();
+                        }
                     }
                 });
             },
