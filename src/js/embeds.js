@@ -516,10 +516,12 @@
         }
 
         var mediumEditor = this.core.getEditor();
-        var toolbarContainer = mediumEditor.options.elementsContainer || 'body';
-        var toolbarContainerOffsetTop = toolbarContainer.offsetTop;
+        var elementsContainer = mediumEditor.options.elementsContainer || 'body';
+        var boundaryElementsContainer = elementsContainer.getBoundingClientRect();
+        var elementsContainerTopValue = boundaryElementsContainer.top;
+        var elementsContainerLeftValue = boundaryElementsContainer.left;
 
-        $(toolbarContainer).append(this.templates['src/js/templates/embeds-toolbar.hbs']({
+        $(elementsContainer).append(this.templates['src/js/templates/embeds-toolbar.hbs']({
             styles: this.options.styles,
             actions: this.options.actions
         }).trim());
@@ -527,9 +529,9 @@
         $toolbar = $('.medium-insert-embeds-toolbar');
         $toolbar2 = $('.medium-insert-embeds-toolbar2');
 
-        var scrollTopValue = $(toolbarContainer).scrollTop();
+        var scrollTopValue = $(elementsContainer).scrollTop();
         var pageYOffset = window.pageYOffset;
-        var embedTop = $embed.offset().top + pageYOffset + scrollTopValue - toolbarContainerOffsetTop;
+        var embedTop = $embed.offset().top + pageYOffset + scrollTopValue - elementsContainerTopValue;
 
         top = embedTop - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an embed outset, 5px - distance from an embed
         if (top < 0) {
@@ -540,7 +542,7 @@
             .css({
                 zIndex: this.options.toolbar.zIndex,
                 top: top,
-                left: $embed.offset().left + $embed.width() / 2 - $toolbar.width() / 2
+                left: ($embed.offset().left + $embed.width() / 2 - $toolbar.width() / 2) - elementsContainerLeftValue,
             })
             .show();
 
@@ -548,7 +550,7 @@
             .css({
                 zIndex: this.options.toolbar.zIndex,
                 top: embedTop + 2, // 2px - distance from a border
-                left: $embed.offset().left + $embed.width() - $toolbar2.width() - 4 // 4px - distance from a border
+                left: ($embed.offset().left + $embed.width() - $toolbar2.width() - 4) - elementsContainerLeftValue,// 4px - distance from a border
             })
             .show();
 
