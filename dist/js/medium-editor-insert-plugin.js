@@ -1,5 +1,5 @@
 /*! 
- * medium-editor-insert-plugin v2.100.14 - jQuery insert plugin for MediumEditor
+ * medium-editor-insert-plugin v2.100.15 - jQuery insert plugin for MediumEditor
  *
  * https://github.com/orthes/medium-editor-insert-plugin
  * 
@@ -1293,10 +1293,12 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
         }
 
         var mediumEditor = this.core.getEditor();
-        var toolbarContainer = mediumEditor.options.elementsContainer || 'body';
-        var toolbarContainerOffsetTop = toolbarContainer.offsetTop;
+        var elementsContainer = mediumEditor.options.elementsContainer || 'body';
+        var boundaryElementsContainer = elementsContainer.getBoundingClientRect();
+        var elementsContainerTopValue = boundaryElementsContainer.top;
+        var elementsContainerLeftValue = boundaryElementsContainer.left;
 
-        $(toolbarContainer).append(this.templates['src/js/templates/embeds-toolbar.hbs']({
+        $(elementsContainer).append(this.templates['src/js/templates/embeds-toolbar.hbs']({
             styles: this.options.styles,
             actions: this.options.actions
         }).trim());
@@ -1304,9 +1306,9 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
         $toolbar = $('.medium-insert-embeds-toolbar');
         $toolbar2 = $('.medium-insert-embeds-toolbar2');
 
-        var scrollTopValue = $(toolbarContainer).scrollTop();
+        var scrollTopValue = $(elementsContainer).scrollTop();
         var pageYOffset = window.pageYOffset;
-        var embedTop = $embed.offset().top + pageYOffset + scrollTopValue - toolbarContainerOffsetTop;
+        var embedTop = $embed.offset().top + pageYOffset + scrollTopValue - elementsContainerTopValue;
 
         top = embedTop - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an embed outset, 5px - distance from an embed
         if (top < 0) {
@@ -1317,7 +1319,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
             .css({
                 zIndex: this.options.toolbar.zIndex,
                 top: top,
-                left: $embed.offset().left + $embed.width() / 2 - $toolbar.width() / 2
+                left: ($embed.offset().left + $embed.width() / 2 - $toolbar.width() / 2) - elementsContainerLeftValue,
             })
             .show();
 
@@ -1325,7 +1327,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
             .css({
                 zIndex: this.options.toolbar.zIndex,
                 top: embedTop + 2, // 2px - distance from a border
-                left: $embed.offset().left + $embed.width() - $toolbar2.width() - 4 // 4px - distance from a border
+                left: ($embed.offset().left + $embed.width() - $toolbar2.width() - 4) - elementsContainerLeftValue,// 4px - distance from a border
             })
             .show();
 
@@ -1969,18 +1971,20 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
             that = this;
 
         var mediumEditor = this.core.getEditor();
-        var toolbarContainer = mediumEditor.options.elementsContainer || 'body';
-        var toolbarContainerOffsetTop = toolbarContainer.offsetTop;
+        var elementsContainer = mediumEditor.options.elementsContainer || 'body';
+        var boundaryElementsContainer = elementsContainer.getBoundingClientRect();
+        var elementsContainerTopValue = boundaryElementsContainer.top;
+        var elementsContainerLeftValue = boundaryElementsContainer.left;
 
         var availableStyles = this.options.styles;
-        
+
         if (this.options.toolbar.buttons) {
             availableStyles = {};
             this.options.toolbar.buttons.forEach(function (buttonItem) {
                 availableStyles[buttonItem] = that.options.styles[buttonItem];
             });
         }
-        
+
         var $toolbarElementData = {
             styles: availableStyles,
             actions: this.options.actions
@@ -1989,13 +1993,13 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
         var $toolbarElement = this.templates['src/js/templates/images-toolbar.hbs'](
           $toolbarElementData).trim();
 
-        $(toolbarContainer).append($toolbarElement);
+        $(elementsContainer).append($toolbarElement);
 
         $toolbar = $('.medium-insert-images-toolbar');
 
-        var scrollTopValue = $(toolbarContainer).scrollTop();
+        var scrollTopValue = $(elementsContainer).scrollTop();
         var pageYOffset = window.pageYOffset;
-        var imageTop = $image.offset().top + pageYOffset + scrollTopValue - toolbarContainerOffsetTop;
+        var imageTop = $image.offset().top + pageYOffset + scrollTopValue - elementsContainerTopValue;
 
         top = imageTop - $toolbar.height() - 8 - 2 - 5; // 8px - hight of an arrow under toolbar, 2px - height of an image outset, 5px - distance from an image
         if (top < 0) {
@@ -2006,7 +2010,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
             .css({
                 zIndex: this.options.toolbar.zIndex,
                 top: top,
-                left: $image.offset().left + $image.width() / 2 - $toolbar.width() / 2
+                left: ($image.offset().left + $image.width() / 2 - $toolbar.width() / 2) - elementsContainerLeftValue,
             })
             .show();
 
