@@ -7,6 +7,7 @@
         defaults = {
             editor: null,
             enabled: true,
+            addLabel: '+',
             addons: {
                 images: true, // boolean or object containing configuration
                 embeds: true
@@ -343,7 +344,8 @@
         }
 
         return this.templates['src/js/templates/core-buttons.hbs']({
-            addons: this.options.addons
+          addLabel: this.options.addLabel,
+          addons: this.options.addons
         }).trim();
     };
 
@@ -484,7 +486,8 @@
     
             var offsetParentLeft = $p.offsetParent().position().left,
                 offsetLeft = $p.position().left,
-                buttonAddWidth = $buttons.find('a.medium-insert-buttons-show:first').width();
+                buttonAddWidth = $buttons.find('a.medium-insert-buttons-show:first').width(),
+                topMiddleParagraphDiff = ($p.height() - $buttons.height()) / 2;
     
             left = offsetLeft - buttonAddWidth;
             left = left + this.options.buttonsDiffLeft;
@@ -493,7 +496,7 @@
                 left = offsetLeft;
             }
 
-            top = $p.position().top + parseInt($p.css('margin-top'), 10);
+            top = $p.position().top + parseInt($p.css('margin-top'), 10) + topMiddleParagraphDiff;
     
             if (activeAddon) {
                 if (offsetLeft !== $first.position().left) {
