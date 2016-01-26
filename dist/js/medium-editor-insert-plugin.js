@@ -1769,14 +1769,16 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
      */
 
     Images.prototype.uploadDone = function (e, data) {
-        var $el = $.proxy(this, 'showImage', data.result.files[0].url, data)();
-
-        this.core.clean();
-        this.sorting();
+        var $el = data.context;
 
         if (this.options.uploadCompleted) {
             this.options.uploadCompleted($el, data);
         }
+
+        $el = $.proxy(this, 'showImage', data.result.files[0].url, data)();
+
+        this.core.clean();
+        this.sorting();
     };
 
     /**
