@@ -20,6 +20,7 @@
                 url: 'upload.php',
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
             },
+            fileDeleteOptions: {},
             styles: {
                 wide: {
                     label: '<span class="fa fa-align-justify"></span>',
@@ -100,6 +101,7 @@
     function Images (el, options) {
         this.el = el;
         this.$el = $(el);
+        this.$currentImage = null;
         this.templates = window.MediumInsert.Templates;
         this.core = this.$el.data('plugin_'+ pluginName);
 
@@ -350,13 +352,7 @@
      */
 
     Images.prototype.uploadDone = function (e, data) {
-        var $el = data.context;
-
-        if (this.options.uploadCompleted) {
-            this.options.uploadCompleted($el, data);
-        }
-
-        $el = $.proxy(this, 'showImage', data.result.files[0].url, data)();
+        $.proxy(this, 'showImage', data.result.files[0].url, data)();
 
         this.core.clean();
         this.sorting();
@@ -384,8 +380,13 @@
             domImage = this.getDOMImage();
             domImage.onload = function () {
                 data.context.find('img').attr('src', domImage.src);
+
+                if (this.options.uploadCompleted) {
+                    this.options.uploadCompleted(data.context, data);
+                }
+
                 that.core.triggerInput();
-            };
+            }.bind(this);
             domImage.src = img;
         } else {
             data.context = $(this.templates['src/js/templates/images-image.hbs']({
@@ -415,6 +416,8 @@
 
             if (this.options.preview) {
                 data.submit();
+            } else if (this.options.uploadCompleted) {
+                this.options.uploadCompleted(data.context, data);
             }
         }
 
@@ -438,6 +441,8 @@
         if(this.core.options.enabled) {
             var $image = $(e.target),
                 that = this;
+
+            this.$currentImage = $image;
 
             // Hide keyboard on mobile devices
             this.$el.blur();
@@ -481,6 +486,7 @@
         } else if ($el.is('figcaption') === false) {
             this.core.removeCaptions();
         }
+        this.$currentImage = null;
     };
 
     /**
@@ -537,11 +543,11 @@
             // If deleteMethod is somehow undefined, defaults to POST
             var method = this.options.deleteMethod || 'POST';
 
-            $.ajax({
+            $.ajax($.extend(true, {}, {
                 url: this.options.deleteScript,
                 type: method,
                 data: { file: file }
-            });
+            }, this.options.fileDeleteOptions));
         }
     };
 
@@ -622,6 +628,7 @@
      */
 
     Images.prototype.toolbarAction = function (e) {
+        if (this.$currentImage === null) return;
         var $button = $(e.target).is('button') ? $(e.target) : $(e.target).closest('button'),
             $li = $button.closest('li'),
             $ul = $li.closest('ul'),
@@ -662,13 +669,34 @@
     };
 
     /**
+     * Fires toolbar2 action
+     *
+     * @param {Event} e
+     * @returns {void}
+     */
+
+    Images.prototype.toolbar2Action = function (e) {
+        if (this.$currentImage === null) return;
+        var $button = $(e.target).is('button') ? $(e.target) : $(e.target).closest('button'),
+            callback = this.options.actions[$button.data('action')].clicked;
+
+        if (callback) {
+            callback(this.$el.find('.medium-insert-image-active'));
+        }
+
+        this.core.hideButtons();
+
+        this.core.triggerInput();
+    };
+
+    /**
      * Initialize sorting
      *
      * @returns {void}
      */
 
     Images.prototype.sorting = function () {
-        this.options.sorting();
+        $.proxy(this.options.sorting, this)();
     };
 
     /** Plugin initialization */

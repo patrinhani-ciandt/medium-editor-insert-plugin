@@ -1,6 +1,6 @@
 {
   "name": "medium-editor-insert-plugin",
-  "version": "3.2100.3",
+  "version": "3.2210.0",
   "description": "jQuery insert plugin for MediumEditor",
   "license": "MIT",
   "homepage": "https://github.com/orthes/medium-editor-insert-plugin",
@@ -12,6 +12,7 @@
     "name": "Pavel Linkesch",
     "url": "http://linkesch.sk"
   },
+  "main": "dist/js/medium-editor-insert-plugin.js",
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-autoprefixer": "^3.0.1",

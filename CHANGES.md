@@ -1,4 +1,22 @@
 
+2.2.1 / 2016-02-05
+==================
+
+  * Fix when `uploadCompleted()` is called - wait until uploaded image replaces preview
+  * Fix uploading high quality images
+  * Fix bug when an image toolbar action effects all instances of the editor (when using multiple editors on the same page)
+
+2.2.0 / 2016-01-11
+==================
+
+  * Add ```fileDeleteOptions``` option to images
+
+2.1.1 / 2015-11-23
+==================
+
+  * Fix context for sorting function
+  * Add support for editor's ```elementsContainer``` option
+
 2.1.0 / 2015-10-27
 ==================
 
