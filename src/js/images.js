@@ -185,7 +185,7 @@
         $.each(data, function (key) {
             var $data = $('<div />').html(data[key].value);
 
-            $data.find('.medium-insert-images').find('figcaption, figure').removeAttr('contenteditable');
+            $data.find('.medium-insert-images').find('figcaption, figure');
 
             data[key].value = $data.html();
         });
@@ -379,11 +379,15 @@
         if (this.options.preview && data.context) {
             domImage = this.getDOMImage();
             domImage.onload = function () {
-                data.context.find('img').attr('src', domImage.src);
+                var imgSrc = domImage.src;
 
                 if (this.options.uploadCompleted) {
-                    this.options.uploadCompleted(data.context, data);
+                  this.options.uploadCompleted(data.context, data);
+
+                  imgSrc = data.result.files[0].url;
                 }
+
+                data.context.find('img').attr('src', imgSrc);
 
                 that.core.triggerInput();
             }.bind(this);

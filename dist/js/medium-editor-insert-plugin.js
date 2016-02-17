@@ -1,5 +1,5 @@
 /*! 
- * medium-editor-insert-plugin v3.2210.0 - jQuery insert plugin for MediumEditor
+ * medium-editor-insert-plugin v3.2210.1 - jQuery insert plugin for MediumEditor
  *
  * https://github.com/orthes/medium-editor-insert-plugin
  * 
@@ -928,7 +928,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
         $.each(data, function (key) {
             var $data = $('<div />').html(data[key].value);
 
-            $data.find('.medium-insert-embeds').removeAttr('contenteditable');
+            $data.find('.medium-insert-embeds');
             $data.find('.medium-insert-embeds-overlay').remove();
 
             data[key].value = $data.html();
@@ -1599,7 +1599,7 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
         $.each(data, function (key) {
             var $data = $('<div />').html(data[key].value);
 
-            $data.find('.medium-insert-images').find('figcaption, figure').removeAttr('contenteditable');
+            $data.find('.medium-insert-images').find('figcaption, figure');
 
             data[key].value = $data.html();
         });
@@ -1793,11 +1793,15 @@ this["MediumInsert"]["Templates"]["src/js/templates/images-toolbar.hbs"] = Handl
         if (this.options.preview && data.context) {
             domImage = this.getDOMImage();
             domImage.onload = function () {
-                data.context.find('img').attr('src', domImage.src);
+                var imgSrc = domImage.src;
 
                 if (this.options.uploadCompleted) {
-                    this.options.uploadCompleted(data.context, data);
+                  this.options.uploadCompleted(data.context, data);
+
+                  imgSrc = data.result.files[0].url;
                 }
+
+                data.context.find('img').attr('src', imgSrc);
 
                 that.core.triggerInput();
             }.bind(this);

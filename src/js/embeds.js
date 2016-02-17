@@ -151,7 +151,7 @@
         $.each(data, function (key) {
             var $data = $('<div />').html(data[key].value);
 
-            $data.find('.medium-insert-embeds').removeAttr('contenteditable');
+            $data.find('.medium-insert-embeds');
             $data.find('.medium-insert-embeds-overlay').remove();
 
             data[key].value = $data.html();
