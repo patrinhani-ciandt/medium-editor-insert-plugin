@@ -266,6 +266,7 @@ describe('Images addon', function () {
 
         expect(this.$el.find('img').hasClass('medium-insert-image-active')).toBe(false);
         expect($('.medium-insert-images-toolbar').length).toEqual(0);
+        expect($('.medium-insert-images-toolbar2').length).toEqual(0);
         expect(this.$el.find('figcaption').length).toEqual(0);
     });
 
@@ -397,7 +398,7 @@ describe('Images addon', function () {
         this.$el.find('img').click();
         jasmine.clock().tick(50);
 
-        $('.medium-insert-images-toolbar2 .medium-editor-action').first().click();
+        $('.medium-insert-images-toolbar .medium-editor-action').last().click();
     });
 
     it('validatates file type on upload', function (done) {
